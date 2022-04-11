@@ -142,6 +142,7 @@ print('')
 
 ########################################################
 
+# ImageNet
 print('Downloading ImageNet...')
 imagenet_files = []
 with requests.Session() as session:
@@ -153,8 +154,14 @@ with requests.Session() as session:
         print('')
 print('')
 
+os.system('pwd')
 print('Preprocessing ImageNet...')
-for zip_file in imagenet_files:
+names = os.listdir('./dataset_dir/Imagenet64/')
+for i, name in enumerate(names):
+  names[i] = 'dataset_dir/Imagenet64/' + name
+
+# for zip_file in imagenet_files:
+for zip_file in names:
     ZipFile(zip_file).extractall('/'.join(zip_file.split('/')[:-1]) + '/.')
     os.remove(zip_file)
 print('DONE')
