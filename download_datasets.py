@@ -102,26 +102,24 @@ imagenet_val = 'http://www.image-net.org/image/downsample/Imagenet64_val.zip'
 
 ########################################################
 
-"""
 # MNIST
 mnist_files = []
-print 'Downloading MNIST...'
+print('Downloading MNIST...')
 for url in mnist:
-    print url
+    print(url)
     mnist_files.append(download_file(url, 'mnist'))
-    print ''
-print ''
+    print('')
+print('')
 
-print 'Extracting MNIST...',
+print('Extracting MNIST...')
 for gz_file in mnist_files:
     with gzip.open(gz_file, 'rb') as f_in:
         with open(gz_file[:-3], 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
 
     os.remove(gz_file)
-print 'DONE'
-print ''
-"""
+print('DONE')
+print('')
 
 ########################################################
 
@@ -163,13 +161,20 @@ os.system('pwd')
 """
 
 print('Preprocessing ImageNet...')
+
+"""
 names = os.listdir('./dataset_dir/Imagenet64/')
 for i, name in enumerate(names):
   names[i] = 'dataset_dir/Imagenet64/' + name
 
 # for zip_file in imagenet_files:
 for zip_file in names:
+  try:
     ZipFile(zip_file).extractall('/'.join(zip_file.split('/')[:-1]) + '/.')
     os.remove(zip_file)
+  except IsADirectoryError:
+    pass
+"""
+
 print('DONE')
 print('')
