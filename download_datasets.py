@@ -142,24 +142,20 @@ print('')
 
 ########################################################
 
-"""
-# ImageNet
-print 'Downloading ImageNet...'
+print('Downloading ImageNet...')
 imagenet_files = []
 with requests.Session() as session:
     post = session.post(imagenet_login_url, data=imagenet_login_payload)
 
     for url in imagenet_training + [imagenet_val]:
-        print url
+        print(url)
         imagenet_files.append(download_file(url, 'Imagenet64', session))
-        print ''
-print ''
+        print('')
+print('')
 
-print 'Preprocessing ImageNet...',
+print('Preprocessing ImageNet...')
 for zip_file in imagenet_files:
     ZipFile(zip_file).extractall('/'.join(zip_file.split('/')[:-1]) + '/.')
     os.remove(zip_file)
-print 'DONE'
-print ''
-"""
-
+print('DONE')
+print('')
