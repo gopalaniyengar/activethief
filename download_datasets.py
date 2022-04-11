@@ -123,22 +123,22 @@ print ''
 # GTSR
 gtsr_files = []
 
-print 'Downloading GTSR...'
+print('Downloading GTSR...')
 for url in [gtsr_training, gtsr_test, gtsr_labels]:
-    print url
+    print(url)
     gtsr_files.append(download_file(url, 'GTSRB'))
-    print ''
-print ''
+    print('')
+print('')
 
-print 'Extracting GTSR...',
+print('Extracting GTSR...')
 for zip_file in gtsr_files:
     if zip_file.endswith('_GT.zip'):
         ZipFile(zip_file).extractall('/'.join(zip_file.split('/')[:-1]) + '/.')
     else:
         ZipFile(zip_file).extractall('/'.join(zip_file.split('/')[:-2]) + '/.')
     os.remove(zip_file)
-print 'DONE'
-print ''
+print('DONE')
+print('')
 
 ########################################################
 
