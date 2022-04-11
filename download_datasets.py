@@ -37,8 +37,10 @@ import os
 # http://image-net.org/signup.php?next=download-images #
 ########################################################
 
+"""
 imagenet_username = input('Image-net.org username:')
 imagenet_password = input('Image-net.org password:')
+"""
 
 ########################################################
 
@@ -86,6 +88,8 @@ gtsr_training = 'https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e
 gtsr_test     = 'https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/GTSRB_Final_Test_Images.zip'
 gtsr_labels   = 'https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/GTSRB_Final_Test_GT.zip'
 
+
+"""
 # Supply login credentials for image-net.org
 imagenet_login_payload = {'username': imagenet_username, 'password': imagenet_password}
 imagenet_login_url = 'http://image-net.org/login?next=download-images'
@@ -94,6 +98,7 @@ imagenet_training = [
                         # 'http://www.image-net.org/image/downsample/Imagenet64_train_part2.zip'
                     ]
 imagenet_val = 'http://www.image-net.org/image/downsample/Imagenet64_val.zip'
+"""
 
 ########################################################
 
@@ -141,7 +146,7 @@ print('DONE')
 print('')
 
 ########################################################
-
+"""
 # ImageNet
 print('Downloading ImageNet...')
 imagenet_files = []
@@ -155,6 +160,8 @@ with requests.Session() as session:
 print('')
 
 os.system('pwd')
+"""
+
 print('Preprocessing ImageNet...')
 names = os.listdir('./dataset_dir/Imagenet64/')
 for i, name in enumerate(names):
