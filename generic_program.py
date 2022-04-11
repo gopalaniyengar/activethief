@@ -41,10 +41,11 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 for key, value in tf.flags.FLAGS.__flags.items():
     try:
         logging.info("{} {}" .format(key, value.value) )
-        print "{} {}" .format(key, value.value) 
+        
+        "{} {}" .format(key, value.value) 
     except AttributeError:
         logging.info("{} {}" .format(key, value) )
-        print "{} {}" .format(key, value)
+        print("{} {}" .format(key, value))
         
 assert cfg.source_model is not None
 assert cfg.copy_model is not None
@@ -75,13 +76,13 @@ logdir_copy = os.path.join('logdir' , cfg.source_model, cfg.true_dataset, api_re
 logdir_papernot_copy = os.path.join('logdir', cfg.source_model, cfg.true_dataset, api_retval, cfg.copy_model, 'papernot')
 
 
-print "seed set is ", cfg.seed
+print("seed set is ", cfg.seed)
 
-print logdir_true
+print(logdir_true)
 
-print logdir_copy
+print(logdir_copy)
 
-print logdir_papernot_copy
+print(logdir_papernot_copy)
 
 true_dataset_dsl = load_dataset(cfg.true_dataset) 
 
@@ -101,7 +102,7 @@ count = 1
 
 while True:
     try:
-        print "Loading noise data. Attempt {}" .format(count)
+        print("Loading noise data. Attempt {}" .format(count))
         if noise_dataset_dsl == UniformDSL:
             noise_val_dsl = noise_dataset_dsl(batch_size = cfg.batch_size, mode='val', shape=sample_shape, sample_limit=20100, seed=cfg.seed)
         elif noise_dataset_dsl == ImagenetDSL and cfg.num_to_keep is not None:
@@ -113,11 +114,11 @@ while True:
         if count==5:
             raise Exception("Memory error could not be resolved using time delay")
         else:
-            print "Loading data failed. Waiting for 5 min.."
+            print("Loading data failed. Waiting for 5 min..")
             time.sleep(300)        
         count = count + 1
 
-print "Data loaded"        
+print("Data loaded")       
 
 _, _, noise_channels = noise_val_dsl.get_sample_shape()
 
@@ -127,7 +128,7 @@ count = 1
 
 while True:
     try:
-        print "Loading data. Attempt {}" .format(count)
+        print("Loading data. Attempt {}" .format(count))
         if noise_dataset_dsl == UniformDSL:
             noise_train_dsl = noise_dataset_dsl(batch_size = cfg.batch_size, mode='train', shape=sample_shape, sample_limit= 80100, seed=cfg.seed)
             noise_val_dsl = noise_dataset_dsl(batch_size = cfg.batch_size, mode='val', shape=sample_shape, sample_limit=20100, seed=cfg.seed)
@@ -142,11 +143,11 @@ while True:
         if count==5:
             raise Exception("Memory error could not be resolved using time delay")
         else:
-            print "Loading data failed. Waiting for 5 min.."
+            print("Loading data failed. Waiting for 5 min..")
             time.sleep(300)        
         count = count + 1
 
-print "Training data loaded"        
+print("Training data loaded")        
 
 source_model_type = load_model(cfg.source_model)
 copy_model_type = load_model(cfg.copy_model)
@@ -174,7 +175,7 @@ true_model = source_model_type(batch_size=cfg.batch_size, height=height, width=w
 true_model.print_trainable_parameters()
 true_model.print_arch()
 
-print "True Model",
+print("True Model")
 evaluate(model=true_model, dsl=test_dsl, logdir=logdir_true)
 
 
@@ -196,7 +197,7 @@ with tf.variable_scope("copy_model"):
 
 
 if cfg.copy_source_model:
-    print "deleting the dir {}" .format( logdir_copy )
+    print("deleting the dir {}" .format( logdir_copy ))
 
     shutil.rmtree(logdir_copy, ignore_errors=True, onerror=None)
     
