@@ -89,8 +89,8 @@ def train_model(model, train_dsl, val_dsl, logdir):
                 if best_acc is None or curr_acc > best_acc :
                     best_acc = curr_acc
                     save_path = saver.save(sess, logdir + '/model_epoch_%d' % (epoch) )       
-                    print "Model saved in path: %s" % save_path
-                    print "[BEST]",
+                    print("Model saved in path: %s" % save_path)
+                    print("[BEST]")
                     
                     no_improvement = 0
                 else:
@@ -99,9 +99,9 @@ def train_model(model, train_dsl, val_dsl, logdir):
                     if (no_improvement % cfg.early_stop_tolerance) == 0:
                         break
                 
-                print "Step: {} \tValAccuracy: {} \tTrainLoss: {}" .format(  global_step, curr_acc, np.mean(t_loss) )  
+                print("Step: {} \tValAccuracy: {} \tTrainLoss: {}" .format(  global_step, curr_acc, np.mean(t_loss) ) ) 
 
-            print "End of epoch {} (took {} minutes)." .format(epoch, round((time.time() - epoch_time)/60, 2) ) 
+            print("End of epoch {} (took {} minutes)." .format(epoch, round((time.time() - epoch_time)/60, 2) ) )
         
         
 def evaluate(model, dsl, logdir, checkpoint=None):
@@ -273,7 +273,7 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
     """ Trains the copy_model iteratively"""
     budget = cfg.initial_seed+cfg.val_size+cfg.num_iter*cfg.k
     
-    print "budget: " , budget
+    print("budget: " , budget)
     
     num_batches_tr   = train_dsl.get_num_batches()
     num_batches_test = test_dsl.get_num_batches()
@@ -325,7 +325,7 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
             for class_ in list(np.argmax(trY, -1)):
                 val_label_counts[class_] += 1
         
-        print "val label class dist: ", val_label_counts
+        print("val label class dist: ", val_label_counts)
         
         pred_match = []
         
@@ -339,10 +339,10 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
         
         Y_t     = get_labels(true_model, sess, test_dsl)
         
-        print "Number of test samples" , len(Y_t)
+        print("Number of test samples" , len(Y_t))
         
         for it in range(cfg.num_iter+1):
-            print "Processing iteration " , it+1
+            print("Processing iteration " , it+1)
                                        
             label_counts = dict(list(enumerate([0] * num_classes)))
             
@@ -350,11 +350,11 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
             sess = tf.Session(config=config)            
             sess.run(tf.global_variables_initializer())
             
-            print "Test var value (before restore):", sess.run(copy_model.test_var)
+            print("Test var value (before restore):", sess.run(copy_model.test_var))
             
             orig_saver.restore(sess, tf.train.latest_checkpoint(logdir_true))
             
-            print "Test var value (after restore):", sess.run(copy_model.test_var)
+            print("Test var value (after restore):", sess.run(copy_model.test_var))
             
             saver         = tf.train.Saver(max_to_keep=cfg.num_checkpoints)
 
@@ -371,11 +371,11 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
 
             gc.collect()
                         
-            print 'true model acc', compute_evaluation_measure(true_model, sess, test_dsl, true_model.sum_correct_prediction)
-            print 'copy model acc', compute_evaluation_measure(copy_model, sess, test_dsl, copy_model.sum_correct_prediction)
+            print('true model acc', compute_evaluation_measure(true_model, sess, test_dsl, true_model.sum_correct_prediction))
+            print('copy model acc', compute_evaluation_measure(copy_model, sess, test_dsl, copy_model.sum_correct_prediction))
             
-            print 'true model F1', compute_f1_measure(true_model, sess, test_dsl)
-            print 'copy model F1', compute_f1_measure(copy_model, sess, test_dsl)
+            print('true model F1', compute_f1_measure(true_model, sess, test_dsl))
+            print('copy model F1', compute_f1_measure(copy_model, sess, test_dsl))
             
             exit      = False
             curr_loss = None
@@ -386,7 +386,7 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
                 t_loss     = []
                 epoch_time = time.time()
                 
-                print "\nProcessing epoch {} of iteration {}" .format( epoch+1, it+1)
+                print("\nProcessing epoch {} of iteration {}" .format( epoch+1, it+1))
                 
                 noise_train_dsl_marked.reset_batch_counter()
                 noise_train_dsl.shuffle_data()
@@ -420,10 +420,10 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
                     print('Epoch: {} Step: {} \tTrain Loss: {}'.format(epoch+1, global_step, np.mean(t_loss)))
 
                     curr_acc = compute_evaluation_measure(copy_model, sess, test_dsl, copy_model.sum_correct_prediction)
-                    print "Test Accuracy (True Dataset): {}".format(curr_acc) 
+                    print("Test Accuracy (True Dataset): {}".format(curr_acc) )
 
                     curr_f1 = compute_f1_measure(copy_model, sess, test_dsl)
-                    print "Test F1 (True Dataset): {}".format(curr_f1) 
+                    print("Test F1 (True Dataset): {}".format(curr_f1))
 
                     val_acc = compute_evaluation_measure(copy_model, sess, noise_val_dsl_marked, copy_model.sum_correct_prediction, use_aux=True)
                     
@@ -432,8 +432,8 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
                     if best_f1 is None or val_f1 > best_f1 :
                         best_f1 = val_f1
                         save_path = saver.save(sess, logdir_copy + '/model_step_%d' % (global_step ))
-                        print "Model saved in path: %s" % save_path
-                        print "[BEST]",
+                        print("Model saved in path: %s" % save_path)
+                        print("[BEST]")
 
                         no_improvement = 0
                     else:
@@ -445,13 +445,13 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
                             else:
                                 exit = True
 
-                    print "Valid Acc (Thief Dataset): {}".format(val_acc) 
-                    print "Valid F1 (Thief Dataset): {}".format(val_f1) 
+                    print("Valid Acc (Thief Dataset): {}".format(val_acc))
+                    print("Valid F1 (Thief Dataset): {}".format(val_f1))
                     
-                print "End of epoch {} (took {} minutes).".format(epoch+1, round((time.time() - epoch_time)/60, 2))
+                print("End of epoch {} (took {} minutes).".format(epoch+1, round((time.time() - epoch_time)/60, 2)))
                 
                 if exit:
-                    print "Number of epochs processed: {} in iteration {}" .format( epoch+1, it+1 ) 
+                    print("Number of epochs processed: {} in iteration {}" .format( epoch+1, it+1 ))
                     break
                                 
             saver.restore(sess, tf.train.latest_checkpoint(logdir_copy))
@@ -459,13 +459,13 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
             # Log the best model for each iteration
             iter_save_path = os.path.join(logdir_copy, str(it))
             os.makedirs(iter_save_path)
-            print 'Making directory:', iter_save_path             
-            print 'copy model accuracy: ', compute_evaluation_measure(copy_model, sess, test_dsl, copy_model.sum_correct_prediction)
+            print('Making directory:', iter_save_path)             
+            print('copy model accuracy: ', compute_evaluation_measure(copy_model, sess, test_dsl, copy_model.sum_correct_prediction))
             
             Y_copy  = get_labels(copy_model, sess, test_dsl)
             
-            print "TA count" , np.sum(Y_t == Y_copy)
-            print "Test agreement between source and copy model on true test dataset", np.sum(Y_t == Y_copy)/float( len(Y_t))
+            print("TA count" , np.sum(Y_t == Y_copy))
+            print("Test agreement between source and copy model on true test dataset", np.sum(Y_t == Y_copy)/float( len(Y_t)))
             
             if it+1 == cfg.num_iter+1:
                 break
@@ -478,7 +478,7 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
             noise_train_dsl_unmarked.reset_batch_counter()
             
             
-            print noise_train_dsl_unmarked.get_num_batches()
+            print(noise_train_dsl_unmarked.get_num_batches())
             
             for b in range(noise_train_dsl_unmarked.get_num_batches()):
                 trX, _, tr_idx = noise_train_dsl_unmarked.load_next_batch(return_idx=True)
@@ -523,13 +523,13 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
             if cfg.sampling_method in ['adversarial-kcenter']:
                 s = s2[s]
             
-            print "{} selection time:{} min" .format( cfg.sampling_method, round((time.time() - sss_time)/60, 2) )
+            print("{} selection time:{} min" .format( cfg.sampling_method, round((time.time() - sss_time)/60, 2) ))
 
             if cfg.sampling_method != 'kmeans' and cfg.sampling_method != 'kcenter' :
                 assert len(s) == cfg.k            
             
-            print "len(s):", len(s)
-            print "len(unique(s)):", len(np.unique(s))
+            print("len(s):", len(s))
+            print("len(unique(s)):", len(np.unique(s)))
 
             # Log the chosen samples for each iteration
             np.save(os.path.join(iter_save_path, "samples_chosen.npy"), s)
@@ -554,7 +554,7 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
                     foobXs[foobIdx] = foobX[idx1]
                     foobYps[foobIdx] = foobYp[idx1]
             
-            print "Mark count before:", len(noise_train_dsl.marked)
+            print("Mark count before:", len(noise_train_dsl.marked))
             
             for jj in idx:
                 assert jj not in noise_train_dsl.marked_set, "MASSIVE FAILURE 3!!"
@@ -580,20 +580,20 @@ def train_copynet_iter(true_model, copy_model, train_dsl, valid_dsl, test_dsl, l
                     else:
                         not_found_count += 1
             
-            print "Mark count after:", len(noise_train_dsl.marked)
-            print "Not found count:", not_found_count
-            print "Found count:", hit_count
-            print "Found unique:", len(foobYs) - len(foobXs)
-            print "Did not find unique:", len(foobXs)
+            print("Mark count after:", len(noise_train_dsl.marked))
+            print("Not found count:", not_found_count)
+            print("Found count:", hit_count0
+            print("Found unique:", len(foobYs) - len(foobXs))
+            print("Did not find unique:", len(foobXs))
                 
-            print "Prediction agreement between source and copy model on selected subset is {}" .format( np.trace(pred_true_count) )       
+            print("Prediction agreement between source and copy model on selected subset is {}" .format( np.trace(pred_true_count)))     
             pred_match.append(pred_true_count)                    
             
-            print "End of iteration ", it+1
+            print("End of iteration ", it+1)
         
         if pred_match:
             pred_match = np.stack(pred_match,axis=0)
             np.save( os.path.join(logdir_copy,'pred_match.npy'), pred_match) 
             
-        print "Copynet training completed in {} time" .format( round((time.time() - train_time)/3600, 2)  )
-        print "---Copynet trainning completed---"
+        print("Copynet training completed in {} time" .format( round((time.time() - train_time)/3600, 2)))
+        print("---Copynet trainning completed---")
